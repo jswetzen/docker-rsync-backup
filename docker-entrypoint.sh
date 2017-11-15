@@ -43,6 +43,7 @@ if [ "${REMOTE_HOSTNAME}" ]; then
 fi
 
 # Create backup excludes file by splitting the EXCLUDES variable
+touch /backup_excludes
 IFS=';'
 for exclude in ${EXCLUDES}; do
   echo "${exclude}" >> /backup_excludes
