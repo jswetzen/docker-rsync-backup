@@ -34,13 +34,11 @@
 #
 # --volume /home/mysuer/.ssh:/ssh-keys --env SSH_IDENTITY_FILE=/ssh-keys/id_rsa
 
-# EXCLUDES
-# TODO: Probably has to be fixed and filled in from ENV at container start
-# excludes file - contains one wildcard pattern per line of files to exclude
-#  - This is a rsync exclude file.  See the rsync man page and/or the
-#    example_exclude_file
-#EXCLUDES=/root/backup_excludes
-EXCLUDES=/backup_excludes
+# EXCLUDES (default: "")
+# - A semicolon separated list of exclude patterns. See the FILTER RULES section
+#   of the rsync man page.
+# - The patterna are split by ; and added to an exclude file passed to rsync.
+# - A limititaion is that semicolon may not be present in any of the patterns.
 
 # ARCHIVEROOT (default: /backup)
 # - Root directory to backup to
@@ -65,26 +63,21 @@ EXCLUDES=/backup_excludes
 PIDFILE=/backup.pid
 
 # Skip compression on already compressed files
-# RSYNC_SKIP_COMPRESS="3fr/3g2/3gp/3gpp/7z/aac/ace/amr/apk/appx/appxbundle/arc/arj/arw/asf/avi/bz2/cab/cr2/crypt[5678]/dat/dcr/deb/dmg/drc/ear/erf/flac/flv/gif/gpg/gz/iiq/iso/jar/jp2/jpeg/jpg/k25/kdc/lz/lzma/lzo/m4[apv]/mef/mkv/mos/mov/mp[34]/mpeg/mp[gv]/msi/nef/oga/ogg/ogv/opus/orf/pef/png/qt/rar/rpm/rw2/rzip/s7z/sfx/sr2/srf/svgz/t[gb]z/tlz/txz/vob/wim/wma/wmv/xz/zip"
-RSYNC_SKIP_COMPRESS="3fr"
+RSYNC_SKIP_COMPRESS="3fr/3g2/3gp/3gpp/7z/aac/ace/amr/apk/appx/appxbundle/arc/arj/arw/asf/avi/bz2/cab/cr2/crypt[5678]/dat/dcr/deb/dmg/drc/ear/erf/flac/flv/gif/gpg/gz/iiq/iso/jar/jp2/jpeg/jpg/k25/kdc/lz/lzma/lzo/m4[apv]/mef/mkv/mos/mov/mp[34]/mpeg/mp[gv]/msi/nef/oga/ogg/ogv/opus/orf/pef/png/qt/rar/rpm/rw2/rzip/s7z/sfx/sr2/srf/svgz/t[gb]z/tlz/txz/vob/wim/wma/wmv/xz/zip"
+# RSYNC_SKIP_COMPRESS="3fr"
 
-# directory which holds our current datastore
+# Directory which holds our current datastore
 CURRENT=main
 
-# directory which we save incremental changes to
+# Directory which we save incremental changes to
 INCREMENTDIR=$(date +%Y-%m-%d)
 
-# options to pass to rsync
-# OPTIONS="--force --ignore-errors --delete --delete-excluded \
-#  --exclude-from=$EXCLUDES --backup --backup-dir=$ARCHIVEROOT/$INCREMENTDIR -av"
+# Options to pass to rsync
 OPTIONS="--force --ignore-errors --delete \
- --exclude-from=$EXCLUDES \
+ --exclude-from=/backup_excludes \
  --skip-compress=$RSYNC_SKIP_COMPRESS \
  --backup --backup-dir=$ARCHIVEROOT/$INCREMENTDIR \
  -aHAXxv --numeric-ids --progress"
-
-# TODO: Is this really necessary?
-# export PATH=$PATH:/bin:/usr/bin:/usr/local/bin
 
 # Make sure our backup tree exists
 install -d "${ARCHIVEROOT}/${CURRENT}"

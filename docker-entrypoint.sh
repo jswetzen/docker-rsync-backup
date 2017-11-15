@@ -42,4 +42,10 @@ if [ "${REMOTE_HOSTNAME}" ]; then
   echo "Added SSH fingerprint for ${REMOTE_HOSTNAME} to /root/.ssh/known_hosts"
 fi
 
+# Create backup excludes file by splitting the EXCLUDES variable
+IFS=';'
+for exclude in ${EXCLUDES}; do
+  echo "${exclude}" >> /backup_excludes
+done
+
 exec "$@"
