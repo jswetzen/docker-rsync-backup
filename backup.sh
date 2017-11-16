@@ -38,7 +38,7 @@
 # - A semicolon separated list of exclude patterns. See the FILTER RULES section
 #   of the rsync man page.
 # - The patterna are split by ; and added to an exclude file passed to rsync.
-# - A limititaion is that semicolon may not be present in any of the patterns.
+# - A limitation is that semicolon may not be present in any of the patterns.
 
 # ARCHIVEROOT (default: /backup)
 # - Root directory to backup to
